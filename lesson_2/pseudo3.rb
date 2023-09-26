@@ -31,11 +31,9 @@ END
 
 def every_other(arr)
   odd_values = Array.new
-  arr.select do |i| 
-    if arr.index(i).even?
-      odd_values << i
-    end
-  end
+
+  odd_values = arr.select { |i| odd_values << i if arr.index(i).even? }  
+
   odd_values
 end
 

@@ -29,7 +29,9 @@ END
 
 def join(arr)
   full_string = String.new
+
   arr.each { |str| full_string << str }
+  
   full_string
 end
 

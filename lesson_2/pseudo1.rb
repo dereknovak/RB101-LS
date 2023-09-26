@@ -26,9 +26,7 @@ RETURN the local variable result
 =end
 
 def add(num1, num2)
-  result = 0
-  result = num1 + num2
-  result
+  num1 + num2
 end
 
 puts add(17, 3)
