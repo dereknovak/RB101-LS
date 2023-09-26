@@ -47,6 +47,7 @@ def third_occurance(string, given_char)
     counter -= 1 if char == given_char 
     break if counter == 0
   end
+  
   counter == 0 ? new_string.rindex(given_char) : nil
 end
 
