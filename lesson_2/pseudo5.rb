@@ -36,7 +36,7 @@ def merge(arr1, arr2)
     arr1.insert(counter, i)
     counter += 2
   end
-  
+
   arr1
 end
 
