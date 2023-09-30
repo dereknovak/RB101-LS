@@ -99,13 +99,11 @@ def calculate(num1, num2, operator, language)
            when '3' then num1 * num2
            when '4'
              if num2 == 0
-               sleep(2)
                return prompt(messages('no_zero', language))
              else
                num1 / num2
              end
            end
-  sleep(2)
 
   result = result == result.to_i ? result.to_i : result
   prompt("#{messages('result', language)} #{result.round(2)}.")
@@ -144,6 +142,7 @@ loop do
 
   # Calculate results
   prompt("#{op_script(operator)} #{messages('operating_numbers', LANGUAGE)}")
+  sleep(2)
   calculate(number1, number2, operator, LANGUAGE)
 
   # Repeat program?
