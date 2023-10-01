@@ -1,0 +1,4 @@
+valid_name: "Please enter a valid name."
+valid_num: "Please enter a valid number."
+valid_int: "Please enter a whole number."
+loan_name: "has been added to your saved loans."
