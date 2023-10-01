@@ -39,15 +39,15 @@ def user_name(language)
   name.capitalize
 end
 
+# Validates number input
 def integer?(input)
-  /^-?d+$/.match(input)
+  /^-?\d+$/.match(input)
 end
 
 def float?(input)
   /\d/.match(input) && /^-?\d*\.?\d*$/.match(input)
 end
 
-# Validates proper number input
 def valid_number?(num)
   integer?(num) || float?(num)
 end
