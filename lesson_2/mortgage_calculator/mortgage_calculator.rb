@@ -31,10 +31,20 @@ def valid_number?(input)
 end
 
 def get_choice
-  choice = gets.chomp    # CONTINUE HERE
-  case choice
-  when '1' then return '1'
+  prompt(messages('directory'))
+
+  choice = ''
+  loop do
+    choice = gets.chomp
+    
+    if CHOICES.include?(choice)
+      return choice      
+    else
+      prompt(messages('valid_choice'))
+    end
   end
+
+  choice
 end
 
 def get_loan_name 
@@ -50,6 +60,8 @@ def get_loan_name
 end
 
 def get_loan_amount
+  prompt(messages('loan_amount'))
+  
   num = ''
   loop do
     num = gets.chomp
@@ -63,6 +75,8 @@ def get_loan_amount
 end
 
 def get_apr
+  prompt(messages('apr'))
+  
   num = ''
   loop do
     num = gets.chomp
@@ -77,6 +91,8 @@ def get_apr
 end
 
 def get_duration
+  prompt(messages('duration'))
+  
   num = ''
   loop do
     num = gets.chomp
@@ -91,6 +107,8 @@ end
 
 def calculate_payment(loan, apr, duration)
   payment = loan * (apr / (1 - (1 + apr)**(-duration)))
+  prompt(messages('payment_script') + payment.round(2).to_s + '.')
+  payment
 end
 
 def yes_no
@@ -103,52 +121,69 @@ def yes_no
     elsif choice.start_with?('n')
       return 'n'
     else
-      prompt(messages('valid_choice'))
+      prompt(messages('valid_response'))
     end
   end
 end
 
 def save?(hash, loan, apr, duration, payment)
+  prompt(messages('save'))
+
   info = Array.new
   choice = yes_no
+
   if choice == 'y'
     prompt(messages('get_loan_name'))
     name = get_loan_name
     prompt("'#{name}' #{messages('loan_name')}")
     info.push(loan, apr, duration, payment)
-    hash[name.to_sym] = info
+    hash[name] = info
   else
     prompt(messages('main_menu'))
   end
 end
 
 def loan_calculator(loans_hash)
-  prompt(messages('loan_amount'))
   loan_amount = get_loan_amount
-  prompt(messages('apr'))
   apr = get_apr
-  prompt(messages('duration'))
   duration = get_duration
+  
   prompt(messages('calculating'))
   sleep(2)
+  
   monthly_payment = calculate_payment(loan_amount, apr, duration)
-  prompt(messages('payment_script') + monthly_payment.round(2).to_s + '.')
   sleep(2)
-  prompt(messages('save'))
+  
   save?(loans_hash, loan_amount, apr, duration, monthly_payment)
   sleep(2)
 end
+
+def display_loans(hash)
+  if hash.empty?
+    prompt(messages('empty_hash'))
+  else
+    hash.each do |k,v|
+      prompt("#{k.capitalize}:")
+      prompt("Loan amount: #{v[0]}")
+      prompt("APR: #{v[1]}")
+      prompt("Duration: #{v[2]} months\n")
+      prompt("Monthly payment: $#{v[3]}")
+    end
+  end
+end
+
 
 # Program Start
 
 loop do
   system("clear") || system("cls")
   puts messages('welcome').center(50)
-  prompt(messages('directory'))
+
   option = get_choice
   case option
   when '1' then loan_calculator(loans_hash)
-  when '4' then break   # NOT WORKING
+  when '2' then display_loans(loans_hash)
+  when '4' then break
   end
 end
 
