@@ -4,6 +4,7 @@ valid_int: "Please enter a whole number."
 valid_response: "Must input yes/no."
 valid_choice: "Must choose between 1 - 4."
 positive_num: "Must be a positive number."
+name_exists: "is already taken."
 loan_name: "has been added to your saved loans.\n\n"
 welcome: "Welcome to the Mortgage Calculator!\n"
 directory: |

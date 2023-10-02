@@ -13,6 +13,12 @@ def prompt(message)
   puts "=> " + message
 end
 
+def press_enter
+  sleep(1.5)
+  prompt(messages('continue'))
+  input = gets.chomp
+end
+
 def calculate_payment(loan, apr, duration)
   if apr == 0
     payment = loan / duration
@@ -23,6 +29,31 @@ def calculate_payment(loan, apr, duration)
   payment = "%.2f" % payment
   prompt(messages('payment_script') + payment + '.')
   payment
+end
+
+def save?(hash, loan, apr, duration, payment)
+  prompt(messages('save'))
+
+  info = Array.new
+  choice = get_yes_no
+
+  if choice == 'y'        
+    name = ''
+    loop do
+      name = get_loan_name
+      
+      if hash.include?(name)
+        prompt("'#{name.capitalize}' #{messages('name_exists')}")
+      else
+        prompt("'#{name.capitalize}' #{messages('loan_name')}")
+        info.push(loan, apr, duration, payment)
+        hash[name] = info
+        break
+      end
+    end
+  else
+    prompt(messages('no_save'))
+  end
 end
 
 # Validation methods
@@ -43,9 +74,9 @@ def valid_number?(input)
   integer?(input) || float?(input) 
 end
 
-# Input methods
+# Get methods
 
-def yes_no
+def get_yes_no
   choice = ''
   loop do
     choice = gets.chomp.downcase
@@ -59,14 +90,6 @@ def yes_no
     end
   end
 end
-
-def press_enter
-  sleep(1.5)
-  prompt(messages('continue'))
-  input = gets.chomp
-end
-
-# Get methods
 
 def get_choice
   prompt(messages('directory'))
@@ -149,22 +172,6 @@ def get_duration
     else
       prompt(messages('valid_int'))
     end
-  end
-end
-
-def save?(hash, loan, apr, duration, payment)
-  prompt(messages('save'))
-
-  info = Array.new
-  choice = yes_no
-
-  if choice == 'y'    
-    name = get_loan_name
-    prompt("'#{name.capitalize}' #{messages('loan_name')}")
-    info.push(loan, apr, duration, payment)
-    hash[name] = info
-  else
-    prompt(messages('no_save'))
   end
 end
 
