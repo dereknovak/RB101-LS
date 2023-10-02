@@ -14,8 +14,14 @@ def prompt(message)
 end
 
 def calculate_payment(loan, apr, duration)
-  payment = loan * (apr / (1 - (1 + apr)**(-duration)))
-  prompt(messages('payment_script') + payment.round(2).to_s + '.')
+  if apr == 0
+    payment = loan / duration
+  else
+    payment = loan * (apr / (1 - (1 + apr)**(-duration)))
+  end
+
+  payment = "%.2f" % payment
+  prompt(messages('payment_script') + payment + '.')
   payment
 end
 
@@ -117,10 +123,12 @@ def get_apr
   num = ''
   loop do
     num = gets.chomp
-
-    if valid_number?(num)
+    
+    if num.to_i < 0
+      prompt(messages('positive_num'))
+    elsif valid_number?(num)
       num = num.to_f / 100 / 12
-      return num
+      return num     
     else
       prompt(messages('valid_num'))
     end
@@ -134,7 +142,9 @@ def get_duration
   loop do
     num = gets.chomp
     
-    if integer?(num)
+    if num.to_i <= 0
+      prompt(messages('positive_num'))
+    elsif integer?(num)
       return num.to_i
     else
       prompt(messages('valid_int'))
@@ -181,11 +191,12 @@ def display_loans(hash)
   else
     puts messages('saved_loans').center(50)
     hash.each do |k,v|
+      v[0] = "%.2f" % v[0]
       prompt("Name: #{k.capitalize}")
-      prompt("Loan amount: $#{v[0].to_i}")
-      prompt("APR: #{(v[1] * 100 * 12).round}%")
+      prompt("Loan amount: $#{v[0]}")
+      prompt("APR: #{(v[1] * 100 * 12).round(2)}%")
       prompt("Duration: #{v[2]} months")
-      prompt("Monthly payment: $#{v[3].round(2)}\n\n")
+      prompt("Monthly payment: $#{v[3]}\n\n")
     end
   end
   
