@@ -1,7 +1,6 @@
 require 'yaml'
 MESSAGES = YAML.load_file('mortgage_calculator_messages.yml')
 loans_hash = Hash.new
-
 CHOICES = %w(1 2 3 4)
 
 # Methods
@@ -13,6 +12,14 @@ end
 def prompt(message)
   puts "=> " + message
 end
+
+def calculate_payment(loan, apr, duration)
+  payment = loan * (apr / (1 - (1 + apr)**(-duration)))
+  prompt(messages('payment_script') + payment.round(2).to_s + '.')
+  payment
+end
+
+# Validation methods
 
 def valid_name?(input)
   input.strip.empty? == false
@@ -29,6 +36,31 @@ end
 def valid_number?(input)
   integer?(input) || float?(input) 
 end
+
+# Input methods
+
+def yes_no
+  choice = ''
+  loop do
+    choice = gets.chomp.downcase
+    
+    if choice.start_with?('y')
+      return 'y'
+    elsif choice.start_with?('n')
+      return 'n'
+    else
+      prompt(messages('valid_response'))
+    end
+  end
+end
+
+def press_enter
+  sleep(1.5)
+  prompt(messages('continue'))
+  input = gets.chomp
+end
+
+# Get methods
 
 def get_choice
   prompt(messages('directory'))
@@ -47,10 +79,13 @@ def get_choice
   choice
 end
 
-def get_loan_name 
+def get_loan_name
+  prompt(messages('get_loan_name'))
+
   loan_name = ''
   loop do
-    loan_name = gets.chomp
+    loan_name = gets.chomp.downcase
+    
     if valid_name?(loan_name)
       return loan_name
     else
@@ -66,8 +101,10 @@ def get_loan_amount
   loop do
     num = gets.chomp
     
-    if valid_number?(num)
-      return num.to_f
+    if num.to_i <= 0
+      prompt(messages('positive_num'))
+    elsif valid_number?(num)
+      return num.to_f    
     else
       prompt(messages('valid_num'))
     end
@@ -105,43 +142,23 @@ def get_duration
   end
 end
 
-def calculate_payment(loan, apr, duration)
-  payment = loan * (apr / (1 - (1 + apr)**(-duration)))
-  prompt(messages('payment_script') + payment.round(2).to_s + '.')
-  payment
-end
-
-def yes_no
-  choice = ''
-  loop do
-    choice = gets.chomp.downcase
-    
-    if choice.start_with?('y')
-      return 'y'
-    elsif choice.start_with?('n')
-      return 'n'
-    else
-      prompt(messages('valid_response'))
-    end
-  end
-end
-
 def save?(hash, loan, apr, duration, payment)
   prompt(messages('save'))
 
   info = Array.new
   choice = yes_no
 
-  if choice == 'y'
-    prompt(messages('get_loan_name'))
+  if choice == 'y'    
     name = get_loan_name
-    prompt("'#{name}' #{messages('loan_name')}")
+    prompt("'#{name.capitalize}' #{messages('loan_name')}")
     info.push(loan, apr, duration, payment)
     hash[name] = info
   else
-    prompt(messages('main_menu'))
+    prompt(messages('no_save'))
   end
 end
+
+# Main methods
 
 def loan_calculator(loans_hash)
   loan_amount = get_loan_amount
@@ -155,23 +172,52 @@ def loan_calculator(loans_hash)
   sleep(2)
   
   save?(loans_hash, loan_amount, apr, duration, monthly_payment)
-  sleep(2)
+  press_enter
 end
 
 def display_loans(hash)
   if hash.empty?
     prompt(messages('empty_hash'))
   else
+    puts messages('saved_loans').center(50)
     hash.each do |k,v|
-      prompt("#{k.capitalize}:")
-      prompt("Loan amount: #{v[0]}")
-      prompt("APR: #{v[1]}")
-      prompt("Duration: #{v[2]} months\n")
-      prompt("Monthly payment: $#{v[3]}")
+      prompt("Name: #{k.capitalize}")
+      prompt("Loan amount: $#{v[0].to_i}")
+      prompt("APR: #{(v[1] * 100 * 12).round}%")
+      prompt("Duration: #{v[2]} months")
+      prompt("Monthly payment: $#{v[3].round(2)}\n\n")
     end
   end
+  
+  press_enter
 end
 
+def delete_loan(hash)
+  if hash.empty?
+    prompt(messages('empty_hash'))
+  else
+    prompt(messages('delete?'))
+    hash.each_key { |k| prompt("'#{k.capitalize}'?") }
+
+    choice = ''
+    loop do
+      choice = gets.chomp.downcase
+      
+      if hash.include?(choice)
+        hash.delete(choice)
+        prompt("'#{choice.capitalize}' #{messages('deleted')}")
+        break
+      elsif choice == 'q'
+        break
+      else
+        prompt("'#{choice.capitalize}' #{messages('no_key')}")
+      end
+    end
+  end
+
+  return if choice == 'q'
+  press_enter
+end
 
 # Program Start
 
@@ -183,9 +229,9 @@ loop do
   case option
   when '1' then loan_calculator(loans_hash)
   when '2' then display_loans(loans_hash)
+  when '3' then delete_loan(loans_hash)
   when '4' then break
   end
 end
 
-  p loans_hash
-
+prompt(messages('goodbye'))
