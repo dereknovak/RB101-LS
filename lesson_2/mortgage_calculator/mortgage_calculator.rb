@@ -14,7 +14,6 @@ def prompt_message(message)
 end
 
 def press_enter
-  sleep(1.5)
   prompt_message('continue')
   gets.chomp
 end
@@ -34,26 +33,39 @@ end
 def save?(hash, loan, apr, duration, payment)
   prompt_message('save')
 
-  info = Array.new
   choice = get_yes_no
 
   if choice == 'y'
-    name = ''
-    loop do
-      name = get_loan_name
-
-      if hash.include?(name)
-        prompt("'#{name.capitalize}' is already taken.\n")
-      else
-        prompt("'#{name.capitalize}' has been added to your saved loans.\n\n")
-        info.push(loan, apr, duration, payment)
-        hash[name] = info
-        break
-      end
-    end
+    get_loan_name(hash, loan, apr, duration, payment)
   else
     prompt_message('no_save')
   end
+end
+
+def delete_key(hash)
+  loop do
+    choice = gets.chomp.downcase
+
+    if hash.include?(choice)
+      hash.delete(choice)
+      prompt("'#{choice.capitalize}' has been deleted.\n\n")
+      break
+    elsif choice == 'q'
+      return choice
+    else
+      prompt("'#{choice.capitalize}' is not a saved loan.")
+    end
+  end
+end
+
+def display_format(k, v)
+  v[0] = format("%.2f", v[0])
+
+  prompt("Name: #{k.capitalize}")
+  prompt("Loan amount: $#{v[0]}")
+  prompt("APR: #{(v[1] * 100 * 12).round(2)}%")
+  prompt("Duration: #{v[2]} months")
+  prompt("Monthly payment: $#{v[3]}\n\n")
 end
 
 # Validation methods
@@ -97,26 +109,27 @@ def get_choice
   choice = ''
   loop do
     choice = gets.chomp
-
-    if CHOICES.include?(choice)
-      return choice
-    else
-      prompt_message('valid_choice')
-    end
+    return choice if CHOICES.include?(choice)
+    prompt_message('valid_choice')
   end
 
   choice
 end
 
-def get_loan_name
+def get_loan_name(hash, loan, apr, duration, payment)
   prompt_message('get_loan_name')
 
-  loan_name = ''
   loop do
-    loan_name = gets.chomp.downcase
+    info = Array.new
+    name = gets.chomp.downcase
 
-    if valid_name?(loan_name)
-      return loan_name
+    if hash.include?(name)
+      prompt("'#{name.capitalize}' is already taken.\n")
+    elsif valid_name?(name)
+      prompt("'#{name.capitalize}' has been added to your saved loans.\n\n")
+      info.push(loan, apr, duration, payment)
+      hash[name] = info
+      break
     else
       prompt_message('valid_name')
     end
@@ -198,13 +211,7 @@ def display_loans(hash)
   else
     puts "Saved Loans\n\n".center(50)
     hash.each do |k, v|
-      v[0] = format("%.2f", v[0])
-
-      prompt("Name: #{k.capitalize}")
-      prompt("Loan amount: $#{v[0]}")
-      prompt("APR: #{(v[1] * 100 * 12).round(2)}%")
-      prompt("Duration: #{v[2]} months")
-      prompt("Monthly payment: $#{v[3]}\n\n")
+      display_format(k, v)
     end
   end
 
@@ -217,23 +224,10 @@ def delete_loan(hash)
   else
     prompt_message('delete?')
     hash.each_key { |k| prompt("'#{k.capitalize}'?") }
-
-    choice = ''
-    loop do
-      choice = gets.chomp.downcase
-
-      if hash.include?(choice)
-        hash.delete(choice)
-        prompt("'#{choice.capitalize}' has been deleted.\n\n")
-        break
-      elsif choice == 'q'
-        return choice
-      else
-        prompt("'#{choice.capitalize}' is not a saved loan.")
-      end
-    end
+    choice = delete_key(hash)
   end
 
+  return if choice == 'q'
   press_enter
 end
 
