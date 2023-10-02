@@ -1,6 +1,14 @@
 require 'yaml'
 MESSAGES = YAML.load_file('calculator_messages.yml')
 
+# Heredoc
+
+language_prompt = <<-LNG
+Language:
+  'en' => English
+  'es' => Español
+LNG
+
 # Methods
 
 # Pulls international messages from calculator_messages.yml
@@ -11,32 +19,6 @@ end
 # Prints program responses with '=>'
 def prompt(message)
   puts "=> #{message}"
-end
-
-# Selects program language
-def select_language
-  language = ''
-  loop do
-    language = gets.chomp.downcase
-    if language == 'en' || language == 'es'
-      break
-    else
-      prompt("Not a valid language / No es un idioma válido")
-    end
-  end
-
-  language
-end
-
-# Returns user's name
-def user_name(language)
-  name = ''
-  loop do
-    name = gets.chomp
-    name.strip.empty? ? prompt(messages('valid_name', language)) : break
-  end
-
-  name.capitalize
 end
 
 # Validates number input
@@ -53,42 +35,13 @@ def valid_number?(num)
 end
 
 # Confirms operation to user
-def op_script(op)
-  case op
-  when '1' then messages('adding', LANGUAGE)
-  when '2' then messages('subtracting', LANGUAGE)
-  when '3' then messages('multiplying', LANGUAGE)
-  when '4' then messages('dividing', LANGUAGE)
+def display_opt(operation)
+  case operation
+  when '1' then messages('adding', LANG)
+  when '2' then messages('subtracting', LANG)
+  when '3' then messages('multiplying', LANG)
+  when '4' then messages('dividing', LANG)
   end
-end
-
-# Returns user's number inputs
-def prompt_user_number(message, language)
-  number = ''
-  loop do
-    prompt(messages(message, language))
-    number = gets.chomp
-
-    valid_number?(number) ? break : prompt(messages('valid_number', language))
-  end
-
-  number.to_f
-end
-
-# Returns user's operator choice
-def operator_choice(language)
-  operator = ''
-  loop do
-    operator = gets.chomp
-
-    if %w(1 2 3 4).include?(operator)
-      break
-    else
-      prompt(messages('valid_choice', language))
-    end
-  end
-
-  operator
 end
 
 # Calculates solution using user's inputs
@@ -109,46 +62,89 @@ def calculate(num1, num2, operator, language)
   prompt("#{messages('result', language)} #{result.round(2)}.")
 end
 
-# Heredoc
+# Selects program language
+def get_language(language_prompt)
+  prompt(language_prompt)
 
-language_prompt = <<-LNG
-Language:
-  'en' => English
-  'es' => Español
-LNG
+  language = ''
+  loop do
+    language = gets.chomp.downcase
+    if language == 'en' || language == 'es'
+      break
+    else
+      prompt("Not a valid language / No es un idioma válido")
+    end
+  end
+
+  language
+end
+
+# Returns user's name
+def get_name(language)
+  name = ''
+  loop do
+    name = gets.chomp
+    name.strip.empty? ? prompt(messages('valid_name', language)) : break
+  end
+
+  name = name.capitalize
+  prompt("#{messages('hello', LANG)}, #{name}.")
+  name
+end
+
+# Returns user's number inputs
+def get_number(message, language)
+  number = ''
+  loop do
+    prompt(messages(message, language))
+    number = gets.chomp
+
+    valid_number?(number) ? break : prompt(messages('valid_number', language))
+  end
+
+  number.to_f
+end
+
+# Returns user's operator choice
+def get_operator(language)
+  prompt(messages('which_operation', LANG))
+
+  operator = ''
+  loop do
+    operator = gets.chomp
+
+    if %w(1 2 3 4).include?(operator)
+      break
+    else
+      prompt(messages('valid_choice', language))
+    end
+  end
+
+  operator
+end
+
+# Main program method
+def calculator
+  loop do
+    number1 = get_number('first_number', LANG)
+    number2 = get_number('second_number', LANG)
+
+    operator = get_operator(LANG)
+
+    prompt("#{display_opt(operator)} #{messages('operating_numbers', LANG)}")
+    calculate(number1, number2, operator, LANG)
+
+    prompt(messages('repeat_loop', LANG))
+    answer = gets.chomp
+    break unless answer.downcase.start_with?(messages('yes_no', LANG))
+  end
+end
 
 # Start of Program
 
 system("clear") || system("cls")
-
-# Language selection
-prompt(language_prompt)
-LANGUAGE = select_language
-
-# Welcome and introduction
-prompt(messages('welcome', LANGUAGE))
-name = user_name(LANGUAGE)
-prompt("#{messages('hello', LANGUAGE)}, #{name}.")
-
-# Main loop
-loop do
-  # Get numbers
-  number1 = prompt_user_number('first_number', LANGUAGE)
-  number2 = prompt_user_number('second_number', LANGUAGE)
-
-  # Get operation
-  prompt(messages('which_operation', LANGUAGE))
-  operator = operator_choice(LANGUAGE)
-
-  # Calculate results
-  prompt("#{op_script(operator)} #{messages('operating_numbers', LANGUAGE)}")
-  sleep(2)
-  calculate(number1, number2, operator, LANGUAGE)
-
-  # Repeat program?
-  prompt(messages('repeat_loop', LANGUAGE))
-  answer = gets.chomp
-  break unless answer.downcase.start_with?(messages('yes_no', LANGUAGE))
-end
-
-prompt(messages('goodbye', LANGUAGE))
+LANG = get_language(language_prompt)
+prompt(messages('welcome', LANG))
+name = get_name(LANG)
+calculator
+prompt("#{messages('goodbye1', LANG)}, #{name}, #{messages('goodbye2', LANG)}")

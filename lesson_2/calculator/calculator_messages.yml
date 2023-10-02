@@ -21,7 +21,8 @@ en:
   no_zero: "You can't divide by 0!"
   repeat_loop: "Do you want to perform another calculation? (Y to calculate again)"
   yes_no: 'y'
-  goodbye: "Thank you for using the calculator. Good bye!"
+  goodbye1: "Thank you"
+  goodbye2: "for using the calculator. Good bye!"
 es:
   welcome: "¡Bienvenido a la calculadora! Entre su nombre:"
   valid_name: "Asegúrese de entrar un nombre válido."
@@ -45,4 +46,5 @@ es:
   no_zero: ¡No puedes dividir por 0!
   repeat_loop: "¿Quieres realizar otro cálculo? (S para calcular nuevamente)"
   yes_no: 's'
-  goodbye: "Gracias por usar la calculadora. ¡Adiós!"
+  goodbye1: "Gracias"
+  goodbye2: "por usar la calculadora. ¡Adiós!"
