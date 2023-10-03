@@ -143,7 +143,7 @@ def get_loan_amount
   loop do
     num = gets.chomp
 
-    if num.to_i <= 0
+    if num.to_i < 0
       prompt_message('positive_num')
     elsif valid_number?(num)
       return num.to_f

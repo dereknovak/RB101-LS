@@ -11,13 +11,13 @@ directory: |
      3) Remove a loan
      4) Exit program
 get_loan_name: "What would you like to name this loan?"
-loan_amount: "How much is the loan amount?"
-apr: "What is the APR? (%)"
+loan_amount: "How much is the loan amount? ('20' for $20)"
+apr: "What is the APR? ('2.5' for 2.5%)"
 duration: "What is the duration, in months, for the loan?"
 calculating: "Calculating the monthly payment..."
 save: "Would you like to save this loan? (y/n)"
 no_save: "Loan not saved.\n\n"
-empty_hash: "There are no saved loans.\n\n"
+empty_hash: "There are no saved loans. You can add a loan by saving after a calculation.\n\n"
 continue: "Press 'Enter' to return to main menu."
 delete?: "Which loan would you like to delete? ('Q' to quit)"
 goodbye: "Thank you for using the Mortgage Calculator! Have a great day."
