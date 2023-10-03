@@ -209,10 +209,8 @@ def display_loans(hash)
   if hash.empty?
     prompt_message('empty_hash')
   else
-    puts "Saved Loans\n\n".center(50)
-    hash.each do |k, v|
-      display_format(k, v)
-    end
+    puts "Saved Loans\n".center(50)
+    hash.each { |k, v| display_format(k, v) }
   end
 
   press_enter
