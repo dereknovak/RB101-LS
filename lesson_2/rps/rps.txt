@@ -1,0 +1,138 @@
+=begin
+
+PEDAC Template
+==============
+
+(Understand the) Problem
+------------------------
+
+-  Inputs: choices: rock, paper, scissors, lizard, spock
+-  Output: Win. Loss. Tie
+
+---
+
+**Problem Domain:**
+
+Create a RPS game that competes against computer
+Create a winner each round
+Add point to winning side until someone reaches a certain amount
+Declare a winner
+Input should accommodate lazy users (r for rock)
+---
+
+**Implicit Requirements:**
+
+Can only choose between 5 options
+
+---
+
+**Clarifying Questions:**
+
+1.
+2.
+3.
+
+---
+
+**Mental Model:**
+
+Introduce game
+Ask how many games they'd like to play
+  Best 2/3, 3/5, 4/7, etc
+generate computer choice
+ask user for choice
+  validate choice
+check if computer's choice is included in user choice's key value
+  if it does, return win
+check if computer choice is the same as user choice
+  if it is, return tie
+Otherwise
+  return loss
+Start again if not end of game
+End game if a winner is set
+Print GRAND CHAMPION
+---
+
+Examples / Test Cases / Edge Cases
+----------------------------------
+
+**Examples:**
+
+-  Example 1
+  -  Inputs:
+  -  Output:
+-  Example 2
+  -  Inputs:
+  -  Output:
+
+---
+
+_Your Test Cases:_
+
+-  Example 3
+  -  Inputs: 
+  -  Output:
+
+---
+
+_Your Edge Cases:_
+
+-  Example 4
+  -  Inputs:
+  -  Output:
+
+---
+
+Data Structure
+
+Hash = choice: [what choice wins against]
+Array = Valid Choices (rock, paper, scissors, lizard, spock)
+
+--------------
+
+---
+
+
+Algorithm
+
+Print welcome
+print How many best of? (only odd #s)
+best of = get input
+  validate number
+    must be positive
+    must be odd
+    must be an integer
+Round counter = 0
+
+LOOP START
+Round + 1
+print Round #
+CPU choice = Random valid choice
+player choice = get Input
+  validate choice
+    valid choices include?
+IF hash[player choice] includes computer choice
+  WIN
+  player count +1
+  BREAK IF count == best of
+ELSIF player choice == computer choice
+  Tie
+ELSE
+  LOSE
+  computer count +1
+  BREAK IF count == best of
+LOOP END
+
+print GRAND CHAMPION
+print play again?
+decision = get Input
+  validate y/n input
+BREAK if no
+
+print closing
+---------
+
+Code
+----
+
+=end
