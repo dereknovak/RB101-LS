@@ -1,44 +1,55 @@
 welcome: |
   Welcome to Rock, Paper, Scissors, Lizard, Spock!
-  (created by Sam Kass, as seen on Big Bang Theory)
-
-  Test your skill, wit, and, well... luck, in a head-to-head match using classic
-  characters such as:
-  * Rock *
-  * Paper *
-  * Scissors *
-  as well as the new contenders:
-  * Lizard *
-  * Spock *
    
-instructions?: "Would you like to view the instructions? (y/n)"
+directory: |
+  What would you like to do?
+  1) New Game
+  2) View Instructions
+  3) Exit Program
+   
 yes_or_no: "Input yes or no."
 instructions: |
   Before play:
+
     - Set up the total number of rounds. To ensure a winner each game, the total rounds
     must be odd.
-    Example: 
-      Total Rounds:    5
-      Winning outcome: 3, 0
-                       3, 1
-                       3, 2
+
+      Total Rounds     - 5
+      Winning outcomes - 3, 0
+                         3, 1
+                         3, 2
+
   Gameplay:
-    - Each round, the players select a challenger to compete. Every challenger has 2
-    others that it will win against.
+
+    - Each round, the players select a challenger to compete. Every challenger has 2 others that it will win against.
+
       * Rock     - Scissors, Lizard                   
       * Paper    - Rock, Spock                   
       * Scissors - Paper, Lizard                   
       * Lizard   - Paper, Spock                   
       * Spock    - Rock, Scissors
+
     - If a winning challenger is chosen, the player wins the round.
     - If a losing challenger is chosen, the computer wins the round.
-    - If the player and computer choose the same challenger, it's a tie. The round
-    is repeated.
-    - After a player wins the majority of the total rounds, they are declared the
-    "GRAND CHAMPION".
+    - If the player and computer choose the same challenger, it's a tie. The round is repeated.
+    - After a player wins the majority of the total rounds, they are declared the "GRAND CHAMPION".
+     
 rounds?: "Choose the total number of rounds:"
+valid_integer: "Must be a whole number."
 odd_integer: "Must be an odd integer greater than zero."
 challenger?: |
   Who will you choose as your challenger?
-  (rock, paper, scissors, lizard, spock)
-valid_choice: "Input one of the challengers above."
+     (rock, paper, scissors, lizard, spock)
+   
+valid_choice: "Input '1', '2', or '3'"
+valid_challenger: |
+  Input one of the challengers above.
+      (Also: 'r', 'p', 'sc', 'l', 's')
+
+enter: "Press 'Enter' to continue."
+goodbye: "Thank you for playing -- see you next time!"
+player_champion: "Congratulations! You are the GRAND CHAMPION.\n\n"
+computer_champion: "Too bad... The computer is the GRAND CHAMPION.\n\n"
+player_win: "** Player wins! **\n"
+computer_win: "** Computer wins! **\n"
+tie: "It's a tie.\n"
