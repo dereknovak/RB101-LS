@@ -67,7 +67,7 @@ def get_challenger(computer_choice=nil)
   loop do
     choice = gets.chomp.downcase
     if choice == 'cheat'
-      prompt("The computer chose '#{computer_choice}'...")
+      prompt("The computer will choose '#{computer_choice}'...")
     elsif CHALLENGER_CHOICE.include?(choice) ||
           CHOICE_SHORTHAND.include?(choice)
       choice = convert_shorthand(choice)
