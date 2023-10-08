@@ -43,7 +43,7 @@ def get_choice
     if VALID_CHOICES.include?(choice)
       return choice
     else
-      prompt_message('valid_integer')
+      prompt_message('valid_choice')
     end
   end
 end

@@ -6,8 +6,7 @@ directory: |
   1) New Game
   2) View Instructions
   3) Exit Program
-   
-yes_or_no: "Input yes or no."
+    
 instructions: |
   Before play:
 
