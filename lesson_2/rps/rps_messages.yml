@@ -43,7 +43,7 @@ challenger?: |
 valid_choice: "Input '1', '2', or '3'"
 valid_challenger: |
   Input one of the challengers above.
-      (Also: 'r', 'p', 'sc', 'l', 's')
+      (Also: 'r', 'p', 'sc', 'l', 'sp')
 
 enter: "Press 'Enter' to continue."
 goodbye: "Thank you for playing -- see you next time!"
