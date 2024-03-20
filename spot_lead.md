@@ -163,7 +163,7 @@ t = fix(s)
 ```
 
 ```ruby
-
+puts('Will this output?') && puts('What about this?')
 ```
 
 # Variable Scope
