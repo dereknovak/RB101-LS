@@ -402,3 +402,7 @@ end
 multiply(add(2, 5), 3)
 ```
 
+I knew I was ready to take the RB109 written assessment once I could do the following:
+Describe any code snippet (at the RB101 level) line-by-line while using markdown
+Write out any method/core concept included in the Study Guide, and be able to create a short example of each.
+If you can do both of these with relative ease, then you are absolutely prepared.
